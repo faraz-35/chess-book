@@ -1,0 +1,20 @@
+{
+  "entries": [
+    {
+      "id": "1.1",
+      "chapter": "What Matters Most",
+      "title": "What Masters See",
+      "attempts": 0,
+      "note": "",
+      "status": "done"
+    },
+    {
+      "id": "1.2",
+      "chapter": "What Matters Most",
+      "title": "Steering the Game",
+      "attempts": 0,
+      "note": "",
+      "status": "pending"
+    }
+  ]
+}

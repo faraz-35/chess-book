@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Masters See</title>
+<style>
+  :root {
+    --bg: #0e1114;
+    --panel: #15181d;
+    --line: #262c33;
+    --text: #d8d4cc;
+    --dim: #8b929c;
+    --accent: #e2a75e;
+    --good: #86c78a;
+    --bad: #e07b7b;
+    --sq-light: #e8d5b5;
+    --sq-dark: #a97f56;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font: 17px/1.75 Georgia, "Times New Roman", serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .ui { font-family: -apple-system, "SF Pro Text", "Segoe UI", sans-serif; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .page { max-width: 1080px; margin: 0 auto; padding: 28px 24px 80px; }
+
+  header { margin-bottom: 20px; }
+  .book { font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--dim); }
+  .book a { color: var(--dim); }
+  .book a:hover { color: var(--accent); }
+  .book b { color: var(--accent); font-weight: 600; }
+  #chapter-head { font-size: 21px; margin-top: 6px; font-family: Georgia, serif; }
+
+  .progress { display: flex; align-items: center; gap: 14px; margin: 16px 0 26px; }
+  .bar-track { flex: 1; height: 2px; background: var(--line); border-radius: 2px; overflow: hidden; }
+  #bar { height: 100%; width: 0; background: var(--accent); transition: width .3s ease; }
+  #pos { font-size: 12px; color: var(--dim); min-width: 48px; text-align: right; }
+
+  .layout { display: grid; grid-template-columns: minmax(320px, 460px) 1fr; gap: 44px; align-items: start; }
+
+  /* board column */
+  .board-col { position: sticky; top: 24px; }
+  #board {
+    position: relative; width: 100%; aspect-ratio: 1;
+    border-radius: 6px; overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,.5);
+    outline: 1px solid var(--line);
+    user-select: none;
+    cursor: pointer;
+  }
+  #board.shake { animation: shake .35s; }
+  @keyframes shake {
+    20% { transform: translateX(-7px); } 40% { transform: translateX(6px); }
+    60% { transform: translateX(-4px); } 80% { transform: translateX(3px); }
+  }
+  .squares { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(8, 1fr); grid-template-rows: repeat(8, 1fr); }
+  .square.light { background: var(--sq-light); }
+  .square.dark { background: var(--sq-dark); }
+  .square { position: relative; }
+  .square[data-coord]::after {
+    content: attr(data-coord);
+    position: absolute; font: 600 10px -apple-system, sans-serif;
+    color: rgba(20,20,20,.55); right: 3px; bottom: 1px;
+  }
+  .square.selected { box-shadow: inset 0 0 0 3px rgba(226,167,94,.9); }
+  .pieces { position: absolute; inset: 0; pointer-events: none; }
+  .piece {
+    position: absolute; width: 12.5%; height: 12.5%;
+    background-size: 88%; background-position: center; background-repeat: no-repeat;
+    transition: transform .3s cubic-bezier(.2,.8,.3,1), opacity .25s;
+    will-change: transform;
+  }
+  .piece.dying { opacity: 0; }
+  .shapes { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .cover {
+    position: absolute; inset: 0; display: none; place-items: center;
+    background: rgba(14,17,20,.55); pointer-events: none;
+  }
+  .cover.on { display: grid; }
+  .count { font: 700 64px -apple-system, sans-serif; color: #fff; text-shadow: 0 2px 20px rgba(0,0,0,.6); }
+  #board.blindfold .piece { opacity: 0; }
+
+  #status { margin-top: 14px; font-size: 14px; color: var(--dim); min-height: 24px; }
+  #status .quiz { color: var(--accent); font-weight: 600; }
+
+  /* text column — one continuous article */
+  #steps { min-height: 60vh; }
+  .step { padding: 0 0 8px; }
+  .section-head { display: flex; align-items: center; gap: 12px; margin: 6px 0 22px; }
+  .section-head span {
+    font: 600 12px/1 -apple-system, sans-serif; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--accent);
+  }
+  .section-head::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  .step h2 { font-size: 24px; line-height: 1.3; margin-bottom: 16px; font-family: Georgia, serif; font-weight: 400; }
+  .step-text p { margin-bottom: 14px; }
+  .step-text b { color: #f0ece4; font-weight: 600; }
+
+  .quiz-zone { min-height: 8px; margin: 4px 0 18px; }
+  .quiz-zone .note { color: var(--bad); font-size: 15px; margin-bottom: 10px; }
+  .quiz-zone .praise {
+    margin: 14px 0; padding: 16px 18px;
+    background: var(--panel); border: 1px solid var(--line);
+    border-left: 3px solid var(--accent); border-radius: 4px;
+  }
+  .quiz-zone .praise p { margin-bottom: 10px; }
+  .quiz-zone .praise p:last-child { margin-bottom: 0; }
+  .verdict {
+    display: block; font: 600 12px/1 -apple-system, sans-serif;
+    letter-spacing: .12em; text-transform: uppercase;
+    color: var(--good); margin-bottom: 10px;
+  }
+  .flash-q { font-weight: 600; color: #f0ece4; }
+  .flash-opt {
+    display: inline-block; margin: 4px 8px 4px 0; padding: 7px 16px;
+    background: var(--panel); color: var(--text);
+    border: 1px solid var(--line); border-radius: 4px;
+    font: 500 14px -apple-system, sans-serif; cursor: pointer;
+  }
+  .flash-opt:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+  .flash-opt.good { border-color: var(--good); color: var(--good); }
+  .flash-opt.bad { border-color: var(--bad); color: var(--bad); }
+
+  .link {
+    background: none; border: none; padding: 0; cursor: pointer;
+    color: var(--dim); font: 13px -apple-system, sans-serif;
+    text-decoration: underline; text-underline-offset: 3px;
+  }
+  .link:hover { color: var(--accent); }
+
+  footer {
+    margin-top: 60px; padding-top: 18px; border-top: 1px solid var(--line);
+    font: 13px/2 -apple-system, sans-serif; color: var(--dim);
+    display: flex; gap: 18px; justify-content: space-between; flex-wrap: wrap;
+  }
+  footer .hint { font-size: 11.5px; }
+  .kbd { font: 11px -apple-system, sans-serif; color: var(--dim); border: 1px solid var(--line); border-radius: 3px; padding: 1px 6px; }
+
+  @media (max-width: 880px) {
+    .layout { grid-template-columns: 1fr; }
+    .board-col { position: static; max-width: 460px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="ui">
+    <div class="book"><a href="index.html">Interactive course</a> · <b>Soltis</b>, What It Takes to Become a Chess Master</div>
+    <div id="chapter-head"></div>
+  </header>
+
+  <div class="progress ui">
+    <div class="bar-track"><div id="bar"></div></div>
+    <span id="pos"></span>
+  </div>
+
+  <div class="layout">
+    <div class="board-col">
+      <div id="board"></div>
+      <div id="status" class="ui"></div>
+    </div>
+    <div id="steps"></div>
+  </div>
+
+  <footer class="ui" id="foot"></footer>
+</div>
+
+<script src="chess.min.js"></script>
+<script src="pieces.js"></script>
+<script src="engine.js"></script>
+</body>
+</html>

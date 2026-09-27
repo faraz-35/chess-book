@@ -1,0 +1,50 @@
+Verified seed games for the content generator. Every line replays legally
+(check: `npm run validate -- data/source/games.pgn`). The generator copies
+moves EXACTLY from here when a section fits a game, and never invents
+historical games of its own.
+
+[Event "Opera Game"]
+[Site "Paris Opera House"]
+[White "Paul Morphy"]
+[Black "Duke of Brunswick and Count Isouard"]
+[Year "1858"]
+[Result "1-0"]
+
+1.e4 e5 2.Nf3 d6 3.d4 Bg4 4.dxe5 Bxf3 5.Qxf3 dxe5 6.Bc4 Nf6 7.Qb3 Qe7 8.Nc3 c6
+9.Bg5 b5 10.Nxb5 cxb5 11.Bxb5+ Nbd7 12.O-O-O Rd8 13.Rxd7 Rxd7 14.Rd1 Qe6
+15.Bxd7+ Nxd7 16.Qb8+ Nxb8 17.Rd8# 1-0
+
+[Event "Caro-Kann catastrophe"]
+[Site "Vienna"]
+[White "Richard Réti"]
+[Black "Savielly Tartakower"]
+[Year "1910"]
+[Result "1-0"]
+
+1.e4 c6 2.d4 d5 3.Nc3 dxe4 4.Nxe4 Nf6 5.Qd3 e5 6.dxe5 Qa5+ 7.Bd2 Qxe5
+8.O-O-O Nxe4 9.Qd8+ Kxd8 10.Bg5+ Kc7 11.Bd8# 1-0
+
+[Event "Légal's Mate"]
+[Site "Paris"]
+[White "Sire de Légal"]
+[Black "Saint Brie"]
+[Year "1750"]
+[Result "1-0"]
+
+1.e4 e5 2.Nf3 d6 3.Bc4 Bg4 4.Nc3 g6 5.Nxe5 Bxd1 6.Bxf7+ Ke7 7.Nd5# 1-0
+
+[Event "Two Knights: the Fried Liver trap"]
+[SetUp "1"]
+[FEN "r1bqkb1r/ppp2ppp/2n2n2/3Pp1N1/2B5/8/PPPP1PPP/RNBQK2R b KQkq - 0 5"]
+[Result "*"]
+[Comment "Constructed study line. After 5.exd5 (played from the start position via e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5), Black must not grab with 5...Nxd5: 6.Nxf7 forks queen and rook (the Fried Liver Attack)."]
+
+5... Nxd5 6.Nxf7 *
+
+[Event "Philidor's Legacy (smothered mate)"]
+[SetUp "1"]
+[FEN "5r1k/6pp/8/6N1/8/1Q6/7P/6K1 w - - 0 1"]
+[Result "*"]
+[Comment "Constructed study line: the classic smothered-mate sequence. The knight and queen force the king into a cage of his own pieces."]
+
+1.Nf7+ Kg8 2.Nh6+ Kh8 3.Qg8+ Rxg8 4.Nf7# *

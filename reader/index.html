@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What It Takes to Become a Chess Master — an interactive course</title>
+<style>
+  :root {
+    --bg: #0e1114;
+    --panel: #15181d;
+    --line: #262c33;
+    --text: #d8d4cc;
+    --dim: #8b929c;
+    --accent: #e2a75e;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font: 17px/1.75 Georgia, "Times New Roman", serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .ui { font-family: -apple-system, "SF Pro Text", "Segoe UI", sans-serif; }
+  a { color: var(--text); text-decoration: none; }
+  a:hover { color: var(--accent); }
+
+  .page { max-width: 680px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  .book { font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--dim); }
+  .book b { color: var(--accent); font-weight: 600; }
+  h1 { font-size: 32px; font-family: Georgia, serif; font-weight: 400; margin: 10px 0 8px; line-height: 1.25; }
+  .sub { color: var(--dim); font-size: 15px; margin-bottom: 44px; }
+
+  .chapter { margin: 34px 0 10px; }
+  .chapter span {
+    font: 600 12px/1 -apple-system, sans-serif; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--accent);
+  }
+  .row {
+    display: flex; align-items: baseline; gap: 14px;
+    padding: 13px 2px; border-bottom: 1px solid var(--line);
+  }
+  .row:first-of-type { border-top: 1px solid var(--line); }
+  .row .id { font: 500 13px -apple-system, sans-serif; color: var(--dim); min-width: 30px; }
+  .row .name { flex: 1; font-size: 17px; }
+  .row .meta { font: 12px -apple-system, sans-serif; color: var(--dim); }
+  .row.missing { opacity: .4; }
+  .row.missing .name { color: var(--dim); }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="book ui">Interactive course · <b>Soltis</b>, Batsford</div>
+  <h1>What It Takes to Become a Chess Master</h1>
+  <p class="sub ui">Read like a book — the board follows you. Original explanations of Andrew Soltis's ideas; positions verified move by move.</p>
+  <div id="toc"></div>
+</div>
+
+<script>
+(async () => {
+  let index;
+  try {
+    index = await (await fetch("../content/index.json")).json();
+  } catch {
+    document.getElementById("toc").innerHTML =
+      `<p class="sub ui">No sections yet — generate one with <code>npm run generate</code>.</p>`;
+    return;
+  }
+  const toc = document.getElementById("toc");
+  let chapter = null;
+  for (const s of index.sections) {
+    if (s.chapter !== chapter) {
+      chapter = s.chapter;
+      const h = document.createElement("div");
+      h.className = "chapter ui";
+      h.innerHTML = `<span>${chapter}</span>`;
+      toc.appendChild(h);
+    }
+    const row = document.createElement("a");
+    row.className = "row";
+    row.href = `section.html?s=${s.id}`;
+    row.innerHTML = `<span class="id">${s.id}</span><span class="name">${s.section.replace(/^[\d.]+ — /, "")}</span><span class="meta ui">${s.steps} steps</span>`;
+    toc.appendChild(row);
+  }
+})();
+</script>
+</body>
+</html>

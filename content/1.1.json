@@ -1,0 +1,211 @@
+{
+  "book": "What It Takes to Become a Chess Master",
+  "author": "Andrew Soltis",
+  "chapter": "Chapter 1 · What Matters Most",
+  "section": "1.1 — What Masters See",
+  "baseFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+  "sections": [
+    {
+      "title": "The Question",
+      "steps": [
+        {
+          "title": "The question this book answers",
+          "text": "A master is not smarter than you. Studies that gave chess players IQ tests found almost no link between IQ and rating, once you are past beginner level.\n\nSo what does the master have that you don't?\n\nNot more knowledge. Most club players know plenty of openings and rules.\n\nThe master's edge is in three skills, and all three are trainable. This section shows you the first one: <b>how masters see the board</b>."
+        }
+      ]
+    },
+    {
+      "title": "What Masters See",
+      "steps": [
+        {
+          "title": "Pieces, or relationships?",
+          "fen": "r1bqkb1r/ppp2ppp/2n2n2/3Pp1N1/2B5/8/PPPP1PPP/RNBQK2R b KQkq - 0 5",
+          "arrows": [
+            [
+              "c4",
+              "f7"
+            ],
+            [
+              "g5",
+              "f7"
+            ]
+          ],
+          "circles": [
+            "f7"
+          ],
+          "text": "An amateur looks here and sees bishops, knights, pawns. A list of pieces.\n\nA master sees something else immediately: <b>two white pieces are both pointing at f7</b> — the one square Black can never defend well this early.\n\nThe master didn't calculate this. He saw it, the way you see a friend's face in a crowd. Chess researchers call these sight-units <b>chunks</b>: familiar piece relationships, stored whole after years of games."
+        },
+        {
+          "title": "Black defends",
+          "moves": [
+            "Nxd5"
+          ],
+          "text": "Black plays 5...Nxd5, grabbing the pawn and blocking the knight's path to f7. Natural.\n\nBut notice what just left the board: the knight on f6 was also a guard. Black has traded a defender for a pawn — and given White an open invitation."
+        },
+        {
+          "title": "Your move — punish it",
+          "quiz": {
+            "solution": "Nxf7",
+            "hint": "One square is now attacked twice and defended zero times. Play the move that lands there.",
+            "praise": "<b>Nxf7!</b> The knight forks the queen on d8 and the rook on h8 at the same time. Black can save the queen, but loses the rook and the right to castle.\n\nThis trap is called the <b>Fried Liver Attack</b>. It has been catching players for 150 years — because f7 is the weakest square in the opening, and the two pieces pointing at it form a chunk every master owns."
+          },
+          "text": "White to play. One of Black's key defenders just abandoned its post.\n\n<b>Find the move.</b> Click your knight, then the square it should go to."
+        }
+      ]
+    },
+    {
+      "title": "The Five-Second Test",
+      "steps": [
+        {
+          "title": "What de Groot found",
+          "text": "In the 1940s, the Dutch psychologist Adriaan de Groot showed chess positions to players for a few seconds, then asked them to rebuild the position from memory.\n\nGrandmasters rebuilt it almost perfectly. Weaker players got about half the pieces right.\n\nThen he repeated the test with <b>random, nonsense positions</b> — pieces scattered with no meaning. Now the grandmasters did no better than beginners.\n\nThe master's memory is not better. His <b>chunks are better</b>: he stores a position as a handful of meaningful relationships, not 32 separate pieces.\n\nTime to test yours."
+        },
+        {
+          "title": "Memorize this",
+          "flash": {
+            "seconds": 8,
+            "questions": [
+              {
+                "q": "Where is the black king?",
+                "options": [
+                  "g8",
+                  "e8",
+                  "h8",
+                  "d8"
+                ],
+                "answer": 1
+              },
+              {
+                "q": "White just castled. On which square did the king land?",
+                "options": [
+                  "g1",
+                  "d1",
+                  "c1",
+                  "b1"
+                ],
+                "answer": 2
+              },
+              {
+                "q": "Which black piece stands on d7?",
+                "options": [
+                  "A rook",
+                  "A knight",
+                  "A bishop",
+                  "Nothing"
+                ],
+                "answer": 1
+              }
+            ]
+          },
+          "fen": "r3kb1r/p2nqppp/5n2/1B2p1B1/4P3/1Q6/PPP2PPP/2KR3R b kq - 2 12",
+          "text": "You will see a real tournament position for 8 seconds. Then it disappears and you answer three questions.\n\nDon't memorize piece by piece. Look for <b>what is going on</b> — that is exactly what the master does."
+        },
+        {
+          "title": "How did you do?",
+          "text": "That was Morphy vs. the Duke of Brunswick and Count Isouard, Paris 1858 — the most famous game ever played, and it returns in the next section.\n\nIf you got most answers right, you were chunking: you saw White's army sweeping toward the black king, not a pile of pieces.\n\nIf you missed some, no problem. Chunks are built by <b>volume</b> — hundreds of games and annotated positions. Every section of this book adds more."
+        }
+      ]
+    },
+    {
+      "title": "Forcing Moves First",
+      "steps": [
+        {
+          "title": "The master's scanning habit",
+          "text": "Here is the second skill. It is a <b>habit</b>, not a talent.\n\nIn every position, before anything else, masters look at the <b>forcing moves</b>: checks, captures, threats. For both sides. Every time.\n\nAmateurs skip this when the position looks quiet — which is exactly when they get hit.\n\nForcing moves matter most because they take control away from your opponent. He had a plan; a check makes him deal with yours, <b>now</b>.\n\nWatch the habit win the most famous game in history."
+        },
+        {
+          "title": "Morphy's position — your move",
+          "fen": "4kb1r/p2n1ppp/4q3/4p1B1/4P3/1Q6/PPP2PPP/2KR4 w k - 0 16",
+          "quiz": {
+            "solution": "Qb8+",
+            "hint": "Checks first. White's queen has an open road up the b-file.",
+            "praise": "<b>Qb8+!</b> — check. And look at it the way his opponents did: the queen can simply be captured by the knight on d7. A blunder?\n\nExcept the king is in check, and after the knight leaves the d-file, White's rook is staring down an open road..."
+          },
+          "text": "Paris, 1858. Morphy has traded everything that could defend the black king. The Count and the Duke defending Black had no chance — but the finish is the point.\n\n<b>It is White's move. Find it.</b> Click the queen, then its square."
+        },
+        {
+          "title": "Mate",
+          "moves": [
+            "Nxb8",
+            "Rd8#"
+          ],
+          "highlight": [
+            "d8"
+          ],
+          "text": "Black must capture the queen — nothing else deals with the check.\n\n<b>Rd8 is mate.</b> The knight that ate the queen is stuck on b8, and the g5-bishop covers the king's only flight square.\n\nMorphy gave up his queen to mate with a rook, because the forcing moves — check, forced capture, mate — did all the work. He never calculated more than \"does Black have a choice here?\"\n\nThat is what matters most: <b>when forcing moves are available, they decide everything else.</b>"
+        }
+      ]
+    },
+    {
+      "title": "Play the Pattern",
+      "steps": [
+        {
+          "title": "Patterns are stored calculation",
+          "text": "Notice something about that mate: you probably <b>saw it coming</b> before White played it. A pattern fired.\n\nEvery pattern you own makes calculation cheaper. Instead of working out four moves from scratch, you recognize the shape and just verify it.\n\nHere is a pattern worth owning. It is called the <b>smothered mate</b> (Philidor's legacy). This time you play every move of White's attack yourself."
+        },
+        {
+          "title": "Move 1 — find the check",
+          "fen": "5r1k/6pp/8/6N1/8/1Q6/7P/6K1 w - - 0 1",
+          "quiz": {
+            "solution": "Nf7+",
+            "hint": "You have exactly one check. Checks first — always play the check and see.",
+            "praise": "<b>Nf7+,</b> the king has one square. But look ahead: the knight and the queen on b3 are now working together. Keep going."
+          },
+          "text": "White to move. Black's king is boxed in by his own pawns and his rook.\n\n<b>Start the attack.</b> You get one check — play it."
+        },
+        {
+          "title": "The king steps forward",
+          "moves": [
+            "Kg8"
+          ],
+          "text": "The king retreats to g8 — the only square. Your turn again. What checks now?"
+        },
+        {
+          "title": "Move 2 — the loudest move in chess",
+          "quiz": {
+            "solution": "Nh6+",
+            "hint": "The knight can jump back toward the king with check — and this time the queen checks too.",
+            "praise": "<b>Nh6+ is a double check</b> — the knight and the queen on the b3–g8 diagonal both attack the king. Nothing can capture it, nothing can block it. The king must run."
+          },
+          "text": "Find the check that comes with a friend."
+        },
+        {
+          "title": "The king is herded",
+          "moves": [
+            "Kh8"
+          ],
+          "text": "The king has exactly one square — and it is the one you want. Look at g8: can your queen land there? Can the king take her?"
+        },
+        {
+          "title": "Move 3 — dare",
+          "quiz": {
+            "solution": "Qg8+",
+            "hint": "Yes, the queen. Before you decline: which white piece guards g8?",
+            "praise": "<b>Qg8+!!</b> The rook must take — the king can't, because your knight on h6 guards the queen. The king is being bricked in with his own pieces."
+          },
+          "text": "Now the hard one. Your queen can land on g8, right in front of the king — apparently undefended.\n\nThe Duke and the Count would have declined this move. <b>Don't.</b>"
+        },
+        {
+          "title": "The sacrifice",
+          "moves": [
+            "Rxg8"
+          ],
+          "text": "The rook takes. One knight move left."
+        },
+        {
+          "title": "Move 4 — mate",
+          "quiz": {
+            "solution": "Nf7#",
+            "hint": "The same check you started with. This time, nothing can capture you.",
+            "praise": "<b>Checkmate.</b> The king's own pieces left him no air — that is the \"smothered\" in smothered mate."
+          },
+          "text": "Finish it."
+        },
+        {
+          "title": "What you just did",
+          "text": "You played a four-move forced sequence, and every move was forced or nearly so. If this pattern is new to you, it now belongs to you — the next time a knight and queen stand near a boxed-in king, <b>you will see it before you calculate it</b>.\n\n<b>Takeaways from this section:</b>\n\n1. Masters see <b>relationships</b> (chunks), not 32 pieces. Volume builds chunks.\n2. Scan <b>checks, captures, threats</b> first — every position, both sides.\n3. Own attacking <b>patterns</b>, so recognition does your calculating.\n\nNext: steering the game — how masters decide what they want from a position before they move."
+        }
+      ]
+    }
+  ]
+}

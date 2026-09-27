@@ -1,0 +1,14 @@
+{
+  "book": "What It Takes to Become a Chess Master",
+  "author": "Andrew Soltis",
+  "sections": [
+    {
+      "id": "1.1",
+      "chapter": "Chapter 1 · What Matters Most",
+      "section": "1.1 — What Masters See",
+      "title": "1.1 — What Masters See",
+      "file": "content/1.1.json",
+      "steps": 19
+    }
+  ]
+}

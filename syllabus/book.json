@@ -1,0 +1,101 @@
+{
+  "book": "What It Takes to Become a Chess Master",
+  "author": "Andrew Soltis",
+  "source": "Batsford 2012. The book's nine chapters are nine attributes that separate masters from club players. Each interactive section is an ORIGINAL treatment of one idea — no text is quoted from the book.",
+  "audience": "Serious club players (~1400–1800) who want to make the leap to master.",
+  "chapters": [
+    {
+      "id": 1,
+      "title": "What Matters Most",
+      "premise": "A master is not smarter and rarely knows more. The edge is three trainable skills: seeing positions as relationships (chunks), scanning forcing moves first, and owning patterns. Above all, a master knows what he wants out of a position and where to steer the game.",
+      "sections": [
+        {
+          "id": "1.1",
+          "title": "What Masters See",
+          "hand-made": true,
+          "spec": {
+            "goal": "Show the difference between how amateurs and masters look at a board: chunks vs piece lists; teach the forcing-moves habit; let the reader play the Fried Liver trap and a full smothered mate.",
+            "keyIdeas": [
+              "Chunks: masters store familiar piece relationships, not 32 pieces",
+              "de Groot's five-second tests: master memory is meaning, not images",
+              "Checks, captures, threats first — every position, both sides",
+              "Patterns are stored calculation: Philidor's legacy (smothered mate)"
+            ],
+            "seedGames": ["fried-liver-trap", "opera-game", "philidors-legacy"]
+          }
+        },
+        {
+          "id": "1.2",
+          "title": "Steering the Game",
+          "spec": {
+            "goal": "Teach what Soltis puts at the heart of the book: a master decides early what he wants out of the position and where to steer the game. Every move — even a quiet one — serves that goal. Amateurs move pieces; masters steer positions.",
+            "keyIdeas": [
+              "Name the goal before you move: 'I want the d-file and a knight on e5' beats 'I want to attack'",
+              "Steering is slow: small advantages (open file, better bishop, safer king) accumulate",
+              "Improve your worst piece — the worst piece is where the next gain is",
+              "Quiet moves steer; forcing moves cash in. A master spends most of the game steering",
+              "When both players steer, the one with the clearer goal usually lands it"
+            ],
+            "teaching_arc": [
+              "Open with an amateur trap: wandering moves with no goal vs a master quietly improving",
+              "A constructed middlegame position where the reader picks the steering move (quiz: the worst piece's best square or the file seizure), not a tactic — a PLAN move",
+              "Show the same position steered well vs steered lazily, two branches",
+              "A flash test on a steering position: where will this endgame/rook go?",
+              "Close with takeaways tying steering to the skills from 1.1"
+            ],
+            "exerciseMix": "3–4 quizzes whose solutions are strong quiet/steering moves (must still have ONE clearly best answer), at most 1 flash",
+            "seedGames": []
+          }
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Habits",
+      "premise": "Masters run automatic checks every move: What are his threats? What are my targets? Is my king safe? The habits, not talent, prevent blunders and build initiative — targets equal initiative.",
+      "sections": []
+    },
+    {
+      "id": 3,
+      "title": "Little Tactics",
+      "premise": "Not combinations — the small stuff: little threats, pawn breaks, tempo moves, defensive finesse. Masters win material slowly with moves that barely look like tactics.",
+      "sections": []
+    },
+    {
+      "id": 4,
+      "title": "More",
+      "premise": "Masters know more, and differently: openings they understand rather than memorize, endgame technique, and positions from their own games — knowledge organized for retrieval.",
+      "sections": []
+    },
+    {
+      "id": 5,
+      "title": "Sense",
+      "premise": "Sense of danger: masters feel when a position is about to turn — before the tactic exists. They read the opponent's ideas the way they read their own.",
+      "sections": []
+    },
+    {
+      "id": 6,
+      "title": "Winnability",
+      "premise": "Masters judge which positions are worth fighting for: when to press a drawish position, when a 'won' position is not, and how much fight is left in a position.",
+      "sections": []
+    },
+    {
+      "id": 7,
+      "title": "Easier",
+      "premise": "Making life easier: simplifying when ahead, avoiding counterplay, trading into endings they understand, and steering toward positions that are easy for them and hard for you.",
+      "sections": []
+    },
+    {
+      "id": 8,
+      "title": "Comp",
+      "premise": "Compensation: when material is worth less than the whole. Masters evaluate dynamic sacrifices — attack, structure, time — rather than counting points.",
+      "sections": []
+    },
+    {
+      "id": 9,
+      "title": "Knowing",
+      "premise": "Knowing yourself: your time trouble, your favorite mistakes, the positions you actually win with. Masters build their repertoire and training around who they are at the board.",
+      "sections": []
+    }
+  ]
+}

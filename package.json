@@ -1,0 +1,15 @@
+{
+  "name": "chess-book",
+  "version": "0.1.0",
+  "description": "Interactive chess book — Soltis's ideas as a scroll-driven reader, with an opencode/glm-5.3-flash content pipeline.",
+  "type": "module",
+  "scripts": {
+    "queue": "node pipeline/queue.mjs",
+    "generate": "node pipeline/generate.mjs",
+    "validate": "node pipeline/validate.mjs",
+    "read": "node reader/server.mjs"
+  },
+  "dependencies": {
+    "chess.js": "0.10.3"
+  }
+}
