@@ -233,6 +233,7 @@ class Reader {
     this.quiz = null;    // { step, game, misses } while the active quiz is unsolved
     this.freeGame = null; // created the moment the reader moves a piece off-script
     this.flash = null;   // { step } while a memory test runs
+    this.ply = 0;        // how many moves of the active step the board has played
     this.displayFen = lesson.baseFen;
     this.buildArticles();
     this.wireBoard();
@@ -249,9 +250,13 @@ class Reader {
       s._startFen = s.fen || cur.fen();
       const g = new Chess(s._startFen);
       s._verbose = [];
+      s._fens = [g.fen()];
       for (const san of s.moves || []) {
         const m = g.move(san);
-        if (m) s._verbose.push(m);
+        if (m) {
+          s._verbose.push(m);
+          s._fens.push(g.fen());
+        }
       }
       s._quizMove = s.quiz ? g.move(s.quiz.solution) : null;
       cur = g;
@@ -316,14 +321,17 @@ class Reader {
     this.setStatus("");
 
     const s = this.steps[i];
+    this.renderStrip(s);
     if (s.flash) { this.runFlash(s, token); return; }
 
     // entering from the step right above: the board is already in place and
     // this step's moves play on. Anywhere else: jump first.
     if (i !== prev + 1) this.board.setPosition(s._startFen);
-    for (const m of s._verbose) {
-      await this.board.animateMove(m);
+    for (let k = 0; k < s._verbose.length; k++) {
+      await this.board.animateMove(s._verbose[k]);
       if (token !== this.token) return;
+      this.ply = k + 1;
+      this.markPly();
     }
     if (s.quiz && s._solved && s._quizMove) {
       await this.board.animateMove(s._quizMove);
@@ -333,6 +341,69 @@ class Reader {
     this.board.setShapes(s.arrows, s.circles, s.highlight);
 
     if (s.quiz && !s._solved) this.armQuiz(s);
+  }
+
+  // ---------- move strip: scrub + replay the active step ----------
+
+  renderStrip(s) {
+    const strip = $("#movestrip");
+    this.ply = s._verbose.length;
+    if (s.flash || s._verbose.length === 0) {
+      strip.style.display = "none";
+      strip.innerHTML = "";
+      return;
+    }
+    strip.style.display = "flex";
+    const parts = [`<button class="link" id="replay">⟲ replay</button>`];
+    s._verbose.forEach((m, k) => {
+      const num = k % 2 === 0 ? `<i>${k / 2 + 1}.</i>` : "";
+      parts.push(`<span class="ply" data-ply="${k + 1}">${num}${m.san}</span>`);
+    });
+    strip.innerHTML = parts.join("");
+    strip.querySelector("#replay").addEventListener("click", () => this.replayStep());
+    strip.querySelectorAll(".ply").forEach((el) => {
+      el.addEventListener("click", () => this.jumpPly(+el.dataset.ply));
+    });
+    this.markPly();
+  }
+
+  markPly() {
+    const strip = $("#movestrip");
+    strip.querySelectorAll(".ply").forEach((el) => {
+      el.classList.toggle("cur", +el.dataset.ply === this.ply);
+    });
+  }
+
+  jumpPly(k) {
+    const s = this.steps[this.active];
+    if (!s || k < 0 || k > s._verbose.length) return;
+    if (this.quiz) return; // the quiz position is fixed until solved
+    this.token++; // cancel any in-flight animation of this step
+    this.ply = k;
+    this.board.deselect();
+    this.board.setPosition(s._fens[k]);
+    this.board.setShapes(s.arrows, s.circles, s.highlight);
+    this.displayFen = s._fens[k];
+    this.markPly();
+  }
+
+  async replayStep() {
+    const s = this.steps[this.active];
+    if (!s || this.quiz) return;
+    const token = ++this.token;
+    this.board.deselect();
+    this.ply = 0;
+    this.board.setPosition(s._startFen);
+    this.board.setShapes([], [], []);
+    this.markPly();
+    for (let k = 0; k < s._verbose.length; k++) {
+      await this.board.animateMove(s._verbose[k]);
+      if (token !== this.token) return;
+      this.ply = k + 1;
+      this.markPly();
+    }
+    this.board.setShapes(s.arrows, s.circles, s.highlight);
+    this.displayFen = this.stepEndFen(s);
   }
 
   // the position a step leaves the board in: its moves, plus the quiz
