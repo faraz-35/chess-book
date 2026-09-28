@@ -20,6 +20,10 @@ http.createServer((req, res) => {
   let file = path.normalize(path.join(ROOT, url.pathname));
   if (!file.startsWith(ROOT)) { res.writeHead(403); return res.end(); }
   if (url.pathname === "/") file = path.join(ROOT, "reader/index.html");
+  // reader pages live under /reader/ — accept root-level paths too
+  if (!fs.existsSync(file) && fs.existsSync(path.join(ROOT, "reader", url.pathname))) {
+    file = path.join(ROOT, "reader", url.pathname);
+  }
   try {
     const body = fs.readFileSync(file);
     res.writeHead(200, { "Content-Type": MIME[path.extname(file)] ?? "application/octet-stream" });
