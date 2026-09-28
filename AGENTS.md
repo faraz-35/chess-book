@@ -42,6 +42,9 @@ reader, produced by a data pipeline that runs on opencode + glm-5.3-flash.
 - The validator is the only ground truth and it is cheap. The model gets at
   most one repair pass; if it still fails, the section fails loudly and is
   deleted. Do not grow the repair loop.
+- Prose may reference moves as `<m SAN>plain words</m>`; the reader clicks
+  them to see the move played. The validator checks every wrapped move is
+  legal in the position where the reader sees it.
 - Never hand-edit `content/<id>.json` without re-running
   `npm run validate -- content/<id>.json`.
 - Never quote Soltis's text. Sections are original treatments of his ideas.

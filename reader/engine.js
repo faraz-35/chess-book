@@ -216,6 +216,13 @@ const $ = (sel) => document.querySelector(sel);
 const sameMove = (m, sanSolution) =>
   m.san.replace(/[+#!?]/g, "") === sanSolution.replace(/[+#!?]/g, "");
 
+// text + <m SAN>words</m> move references → clickable spans
+const renderText = (raw) =>
+  raw
+    .replace(/<m ([^>]+)>([\s\S]*?)<\/m>/g, '<span class="mref" data-san="$1">$2</span>')
+    .replace(/\n\n/g, "</p><p>")
+    .replace(/\n/g, "<br>");
+
 class Reader {
   constructor(lesson) {
     this.lesson = lesson;
@@ -272,11 +279,27 @@ class Reader {
         ? `<div class="section-head"><span>${s._section}</span></div>` : "";
       art.innerHTML = `${head}
         <h2>${s.title || ""}</h2>
-        <div class="step-text">${(s.text || "").replace(/\n\n/g, "</p><p>").replace(/\n/g, "<br>")}</div>
+        <div class="step-text">${renderText(s.text || "")}</div>
         <div class="quiz-zone" data-zone="${i}"></div>`;
       wrap.appendChild(art);
       return art;
     });
+    $("#steps").addEventListener("click", (e) => {
+      const ref = e.target.closest(".mref");
+      if (ref) this.showRef(ref);
+    });
+  }
+
+  // click a move reference in the prose → watch it played on the board
+  async showRef(el) {
+    if (this.quiz || this.flash) return;
+    if (!this.freeGame) this.freeGame = new Chess(this.displayFen);
+    const m = this.freeGame.move(el.dataset.san);
+    if (!m) return;
+    await this.board.animateMove(m);
+    this.displayFen = this.freeGame.fen();
+    this.setStatus(`<button class="link" id="reset-board">reset the board</button>`);
+    $("#reset-board").addEventListener("click", () => this.setActive(this.active));
   }
 
   wireBoard() {
@@ -522,9 +545,7 @@ class Reader {
     s._solved = true;
     this.displayFen = this.stepEndFen(s);
     this.setStatus("");
-    this.zone(s).innerHTML = `<p class="praise"><span class="verdict">${label} ✓</span>${s.quiz.praise
-      .replace(/\n\n/g, "</p><p>")
-      .replace(/\n/g, "<br>")}</p>`;
+    this.zone(s).innerHTML = `<p class="praise"><span class="verdict">${label} ✓</span>${renderText(s.quiz.praise)}</p>`;
   }
 
   // ---------- memory test ----------

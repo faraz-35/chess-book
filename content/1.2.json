@@ -40,7 +40,7 @@
               "d4"
             ]
           ],
-          "text": "Here is the difference between a master and a club player. The club player says \"I'll attack.\" The master says something you can actually work toward: <b>rook to e1, pawn to c3, pawn to d4</b> — a break in the center.\n\nThose three arrows are the whole plan. \"Attack the king\" is a wish. \"c3 and d4\" is a goal, and every move from now on either serves it or gets rejected."
+          "text": "Here is the difference between a master and a club player. The club player says \"I'll attack.\" The master says something you can actually work toward: <m Re1>rook to e1</m>, <m c3>pawn to c3</m>, <m d4>pawn to d4</m> — a break in the center.\n\nThose three moves are the whole plan. \"Attack the king\" is a wish. \"c3 and d4\" is a goal, and every move from now on either serves it or gets rejected. Click any of them to see it played."
         }
       ]
     },

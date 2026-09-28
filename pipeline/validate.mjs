@@ -79,6 +79,7 @@ function replayStep(step, i, carried, errors) {
   }
 
   checkShapes(step, p, errors);
+  checkMoveRefs(step, p, game, errors);
   checkQuiz(step, p, game, errors);
   checkFlash(step, p, errors);
   return game;
@@ -112,6 +113,30 @@ function checkQuiz(step, p, game, errors) {
   } catch {
     const legal = game.moves().slice(0, 10).join(", ");
     err(errors, `${qp}.solution`, `"${q.solution}" is not legal in the quiz position. Legal moves include: ${legal}`);
+  }
+}
+
+// <m SAN>words</m> move references in prose must be legal where the reader
+// sees them: text at the step's display position (after its moves), praise
+// after the quiz solution has been played.
+function checkMoveRefs(step, p, game, errors) {
+  if (!game) return;
+  const scan = (text, where, g) => {
+    if (typeof text !== "string") return;
+    for (const match of text.matchAll(/<m ([^>]+)>([\s\S]*?)<\/m>/g)) {
+      try {
+        g.move(match[1]);
+      } catch {
+        const legal = g.moves().slice(0, 10).join(", ");
+        err(errors, `${p}.${where}`, `move reference <m ${match[1]}> is not legal there. Legal moves include: ${legal}`);
+      }
+    }
+  };
+  scan(step.text, "text", new Chess(game.fen()));
+  if (step.quiz) {
+    const g = new Chess(game.fen());
+    try { g.move(step.quiz.solution); } catch { /* already reported by checkQuiz */ }
+    scan(step.quiz.praise, "quiz.praise", g);
   }
 }
 
