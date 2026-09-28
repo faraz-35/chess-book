@@ -57,7 +57,7 @@
             "c3",
             "O-O"
           ],
-          "text": "Now White does the quiet work. Re1 parks the rook behind the e-pawn — the pawn that will fight for the center once d4 comes; c3 builds the pawn base that d4 will need. Black sets up the same structure and castles too — but he is copying, not steering.\n\nNotice that none of these moves threaten anything. Each one has a job anyway: they are all rehearsals for the break."
+          "text": "Now White does the quiet work. <m Re1>Re1</m> parks the rook behind the e-pawn — the pawn that will fight for the center once <m d4>d4</m> comes; <m c3>c3</m> builds the pawn base that d4 will need. Black sets up the same structure and castles too — but he is copying, not steering.\n\nNotice that none of these moves threaten anything. Each one has a job anyway: they are all rehearsals for the break."
         },
         {
           "title": "Your move — a quiet one",
@@ -75,7 +75,7 @@
             "Bc2",
             "c5"
           ],
-          "text": "Black is not a spectator. Na5 hits your bishop and offers a trade; then c5 strikes at d4 before the pawn even gets there.\n\nThis is normal — your opponent has goals too. White's answers keep the plan alive: the bishop steps back but stays aimed at the kingside, and d4 remains on the agenda."
+          "text": "Black is not a spectator. <m Na5>Na5</m> hits your bishop and offers a trade; then <m c5>c5</m> strikes at d4 before the pawn even gets there.\n\nThis is normal — your opponent has goals too. White's answers keep the plan alive: the bishop steps back but stays aimed at the kingside, and <m d4>d4</m> remains on the agenda."
         }
       ]
     },

@@ -40,7 +40,7 @@
           "moves": [
             "Nxd5"
           ],
-          "text": "Black plays 5...Nxd5, grabbing the pawn and blocking the knight's path to f7. Natural.\n\nBut notice what just left the board: the knight on f6 was also a guard. Black has traded a defender for a pawn — and given White an open invitation."
+          "text": "Black plays <m Nxd5>5...Nxd5</m>, grabbing the pawn and blocking the knight's path to f7. Natural.\n\nBut notice what just left the board: the knight on f6 was also a guard. Black has traded a defender for a pawn — and given White an open invitation."
         },
         {
           "title": "Your move — punish it",
@@ -132,7 +132,7 @@
           "highlight": [
             "d8"
           ],
-          "text": "Black must capture the queen — nothing else deals with the check.\n\n<b>Rd8 is mate.</b> The knight that ate the queen is stuck on b8, and the g5-bishop covers the king's only flight square.\n\nMorphy gave up his queen to mate with a rook, because the forcing moves — check, forced capture, mate — did all the work. He never calculated more than \"does Black have a choice here?\"\n\nThat is what matters most: <b>when forcing moves are available, they decide everything else.</b>"
+          "text": "Black must <m Nxb8>capture the queen</m> — nothing else deals with the check.\n\n<b><m Rd8#>Rd8 is mate</m>.</b> The knight that ate the queen is stuck on b8, and the g5-bishop covers the king's only flight square.\n\nMorphy gave up his queen to mate with a rook, because the forcing moves — check, forced capture, mate — did all the work. He never calculated more than \"does Black have a choice here?\"\n\nThat is what matters most: <b>when forcing moves are available, they decide everything else.</b>"
         }
       ]
     },
@@ -158,7 +158,7 @@
           "moves": [
             "Kg8"
           ],
-          "text": "The king retreats to g8 — the only square. Your turn again. What checks now?"
+          "text": "The king <m Kg8>retreats to g8</m> — the only square. Your turn again. What checks now?"
         },
         {
           "title": "Move 2 — the loudest move in chess",
@@ -190,7 +190,7 @@
           "moves": [
             "Rxg8"
           ],
-          "text": "The rook takes. One knight move left."
+          "text": "<m Rxg8>The rook takes</m>. One knight move left."
         },
         {
           "title": "Move 4 — mate",

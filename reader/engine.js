@@ -290,16 +290,42 @@ class Reader {
     });
   }
 
-  // click a move reference in the prose → watch it played on the board
+  // click a move reference in the prose → watch it on the board:
+  // a move this step plays: scrub to just before it, then play it;
+  // otherwise: play it live from the position on screen.
   async showRef(el) {
-    if (this.quiz || this.flash) return;
-    if (!this.freeGame) this.freeGame = new Chess(this.displayFen);
-    const m = this.freeGame.move(el.dataset.san);
-    if (!m) return;
-    await this.board.animateMove(m);
-    this.displayFen = this.freeGame.fen();
-    this.setStatus(`<button class="link" id="reset-board">reset the board</button>`);
-    $("#reset-board").addEventListener("click", () => this.setActive(this.active));
+    if (this.quiz || this.flash || this._anim) return;
+    this._anim = true;
+    try {
+      const san = el.dataset.san;
+      const s = this.steps[this.active];
+      const own = s ? s._verbose.findIndex((m) => sameMove(m, san)) : -1;
+      if (own !== -1) {
+        const token = ++this.token;
+        this.ply = own;
+        this.board.deselect();
+        this.board.setPosition(s._fens[own]);
+        this.displayFen = s._fens[own];
+        this.markPly();
+        await this.board.animateMove(s._verbose[own]);
+        if (token !== this.token) return;
+        this.ply = own + 1;
+        this.displayFen = s._fens[own + 1];
+        this.markPly();
+        return;
+      }
+      if (!this.freeGame) this.freeGame = new Chess(this.displayFen);
+      const m = this.freeGame.move(san);
+      if (!m) return;
+      const token = ++this.token;
+      await this.board.animateMove(m);
+      if (token !== this.token) return;
+      this.displayFen = this.freeGame.fen();
+      this.setStatus(`<button class="link" id="reset-board">reset the board</button>`);
+      $("#reset-board").addEventListener("click", () => this.setActive(this.active));
+    } finally {
+      this._anim = false;
+    }
   }
 
   wireBoard() {
@@ -332,9 +358,9 @@ class Reader {
 
   // ---------- the board follows the reading ----------
 
-  async setActive(i) {
-    const token = ++this.token;
-    const prev = this.active;
+  // The board never plays on its own: scrolling sets the position, and the
+  // reader drives the moves — strip tokens, ▶ play, or prose references.
+  setActive(i) {
     this.active = i;
     this.progress();
     this.cancelFlash();
@@ -342,26 +368,22 @@ class Reader {
     this.quiz = null;
     this.freeGame = null;
     this.setStatus("");
+    this.token++; // cancel any in-flight playback from the previous step
 
     const s = this.steps[i];
     this.renderStrip(s);
-    if (s.flash) { this.runFlash(s, token); return; }
+    if (s.flash) { this.runFlash(s, this.token); return; }
 
-    // entering from the step right above: the board is already in place and
-    // this step's moves play on. Anywhere else: jump first.
-    if (i !== prev + 1) this.board.setPosition(s._startFen);
-    for (let k = 0; k < s._verbose.length; k++) {
-      await this.board.animateMove(s._verbose[k]);
-      if (token !== this.token) return;
-      this.ply = k + 1;
-      this.markPly();
-    }
-    if (s.quiz && s._solved && s._quizMove) {
-      await this.board.animateMove(s._quizMove);
-      if (token !== this.token) return;
-    }
-    this.displayFen = this.stepEndFen(s);
+    // a puzzle shows its position; a diagram shows its position; a moves
+    // step waits at its start so you can play the moves yourself
+    const fen = s.quiz && !s._solved ? s._fens[s._verbose.length]
+      : s._verbose.length === 0 ? this.stepEndFen(s)
+      : s._startFen;
+    this.ply = s.quiz && !s._solved ? s._verbose.length : 0;
+    this.board.setPosition(fen);
+    this.displayFen = fen;
     this.board.setShapes(s.arrows, s.circles, s.highlight);
+    this.markPly();
 
     if (s.quiz && !s._solved) this.armQuiz(s);
   }
@@ -370,20 +392,19 @@ class Reader {
 
   renderStrip(s) {
     const strip = $("#movestrip");
-    this.ply = s._verbose.length;
     if (s.flash || s._verbose.length === 0) {
       strip.style.display = "none";
       strip.innerHTML = "";
       return;
     }
     strip.style.display = "flex";
-    const parts = [`<button class="link" id="replay">⟲ replay</button>`];
+    const parts = [`<button class="link" id="play">▶ play</button>`];
     s._verbose.forEach((m, k) => {
       const num = k % 2 === 0 ? `<i>${k / 2 + 1}.</i>` : "";
       parts.push(`<span class="ply" data-ply="${k + 1}">${num}${m.san}</span>`);
     });
     strip.innerHTML = parts.join("");
-    strip.querySelector("#replay").addEventListener("click", () => this.replayStep());
+    strip.querySelector("#play").addEventListener("click", () => this.playStep());
     strip.querySelectorAll(".ply").forEach((el) => {
       el.addEventListener("click", () => this.jumpPly(+el.dataset.ply));
     });
@@ -410,23 +431,23 @@ class Reader {
     this.markPly();
   }
 
-  async replayStep() {
+  async playStep() {
     const s = this.steps[this.active];
     if (!s || this.quiz) return;
     const token = ++this.token;
     this.board.deselect();
     this.ply = 0;
     this.board.setPosition(s._startFen);
-    this.board.setShapes([], [], []);
+    this.board.setShapes(s.arrows, s.circles, s.highlight);
+    this.displayFen = s._startFen;
     this.markPly();
     for (let k = 0; k < s._verbose.length; k++) {
       await this.board.animateMove(s._verbose[k]);
       if (token !== this.token) return;
       this.ply = k + 1;
+      this.displayFen = s._fens[k + 1];
       this.markPly();
     }
-    this.board.setShapes(s.arrows, s.circles, s.highlight);
-    this.displayFen = this.stepEndFen(s);
   }
 
   // the position a step leaves the board in: its moves, plus the quiz

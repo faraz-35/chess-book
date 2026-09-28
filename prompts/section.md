@@ -39,11 +39,11 @@ job is only the words: titles, texts, hints, praise.
   takeaway list, then one line on what the next section is about
   (finding and improving your worst piece).
 - `text`: 2–4 short sentences per step, using the skeleton's `point`.
-- When the text names a move the reader could actually play in the position
-  they are looking at, wrap it so it becomes clickable:
-  `<m Re1>rook to e1</m>` — plain words inside, SAN in the tag. Only wrap
-  moves that are legal right there (the validator checks). Never wrap past
-  moves or the quiz solution itself.
+- The prose names moves constantly — wrap EVERY move it names so the reader
+  can click and see it played: `<m Re1>rook to e1</m>` — plain words inside,
+  SAN in the tag. A wrapped move must either be legal in the position the
+  reader is looking at, or be one of that step's own `moves` (the validator
+  checks). Never wrap the quiz solution itself.
 - `hint`: one sentence that nudges without naming the move.
 - `praise`: 1–2 short paragraphs — name the pattern, say why the move worked.
 - Reader: club player (~1400–1800). Plain words, short sentences, direct
