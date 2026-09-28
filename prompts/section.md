@@ -1,20 +1,19 @@
-You are writing one section of an interactive chess book. A board sits beside
-scrolling text; the reader reads, watches the board play, and solves positions
-by moving the pieces. You produce ONE JSON document. Your entire reply becomes
-a file on disk, checked by a validator that replays every move.
+Turn the step skeleton below into a finished interactive chess section.
+Write the JSON to the file `{{OUTFILE}}`, then reply with just `done`.
 
-## Output contract
+All chess content — moves, arrows, quiz solutions — is decided and already
+verified by the pipeline. Copy it EXACTLY. Invent nothing on the board. Your
+job is only the words: titles, texts, hints, praise.
 
-- Reply with ONLY the JSON document. No markdown fences, no prose before or
-  after, no explanation. Start your reply with `{` and end it with `}`.
-- Every move must be legal. Before you write a step with moves or a quiz,
-  replay the line in your head, square by square: where does each piece stand?
-- Do not invent historical games. Use the seed games below when one fits;
-  otherwise present positions as constructed teaching positions.
+## What it teaches
 
-## Document format
+{{GOAL}}
 
-Top level:
+## Step skeleton (copy the chess fields exactly, in this order)
+
+{{SKELETON}}
+
+## Output format
 
     {
       "book": "What It Takes to Become a Chess Master",
@@ -22,54 +21,28 @@ Top level:
       "chapter": "Chapter {{CHAPTER_ID}} · {{CHAPTER_TITLE}}",
       "section": "{{SECTION_ID}} — {{SECTION_TITLE}}",
       "baseFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-      "sections": [ { "title": "…", "steps": [ … ] } ]
+      "sections": [
+        { "title": "subsection title", "steps": [
+          { "title": "step title",
+            "moves": ["…", "…"],
+            "quiz": { "solution": "…", "hint": "…", "praise": "…" },
+            "text": "…" }
+        ] }
+      ]
     }
 
-The board flows through the whole section like one game: a step's position is
-its own `fen` if present, otherwise the previous step's position after its
-moves. Steps:
-
-- `title` — required, short.
-- `text` — required, the reading. Plain text, paragraphs separated by one
-  blank line. `<b>…</b>` is the only allowed markup.
-- `fen` — optional, only when the board must jump somewhere new.
-- `moves` — optional array of SAN moves the board plays when the step opens,
-  e.g. `["Nxd5"]`.
-- `arrows` — optional `[[from,to],…]`, e.g. `[["c4","f7"]]`.
-- `circles`, `highlight` — optional arrays of squares.
-- `quiz` — `{ "solution": "SAN", "hint": "…", "praise": "…" }`. The reader
-  must find and play the solution on the board. `hint` nudges without giving
-  the move away. `praise` is what the reader sees after solving: name the
-  pattern, explain why the move works, in 1–3 short paragraphs (HTML `<b>` ok).
-- `flash` — `{ "seconds": 8, "questions": [ { "q": "…", "options": ["…","…","…"], "answer": 1 } ] }`.
-  Shows a position for N seconds, hides it, asks the questions from memory.
-  3 questions, `answer` is the index of the correct option.
-
-## Content rules
-
-- The reader is a serious club player (about 1400–1800) who wants to become a
-  master. Respect their time: no filler, no repetition of earlier sections.
-- The section teaches the ideas in the SPEC below. That spec is the source of
-  truth. The book by Andrew Soltis is the inspiration — never quote it, never
-  invent quotes from Soltis, write fully original prose.
-- Prose style: short sentences. Everyday words. Speak directly to the reader
-  ("you"). Say exactly what happens on the board and what the reader should
-  do. No marketing tone, no riddles, no cleverness.
-- Quiz quality is the product. Each quiz needs ONE clearly best move, a hint
-  that teaches a habit, and praise that names the pattern the reader just used.
-- Seed games (verified, replay them move by move if you use one):
-{{GAMES}}
-
-## This section's spec
-
-{{SPEC}}
-
-## Shape of a good section
-
-- 3–4 subsections in `sections`, 8–14 steps total.
-- 3–4 quiz steps spread through the section. At most 1 flash step.
-- Open by pulling the reader into the section's question with a concrete board
-  situation. Close with a numbered takeaway list inside the last step's text,
-  then one line pointing at what the section after this one is about.
-- Vary the rhythm: read → watch → solve. Never more than 3 read-only steps in
-  a row.
+- Group the skeleton steps into 2–3 subsections with good titles; keep the
+  steps themselves in the given order, with their moves/arrows/quiz fields
+  exactly as given.
+- A skeleton step with "arrows" becomes a step with those arrows plus its
+  text (no moves). A "takeaways" step is a plain text step: a numbered
+  takeaway list, then one line on what the next section is about
+  (finding and improving your worst piece).
+- `text`: 2–4 short sentences per step, using the skeleton's `point`.
+- `hint`: one sentence that nudges without naming the move.
+- `praise`: 1–2 short paragraphs — name the pattern, say why the move worked.
+- Reader: club player (~1400–1800). Plain words, short sentences, direct
+  address ("you"). Original prose, never quote Soltis.
+- Do NOT replay or verify any chess in your head. Do not add, remove, or
+  change moves. The validator checks the file; if it flags something you
+  get one short fix pass.

@@ -1,7 +1,7 @@
-// One section, end to end: opencode (glm-5.3-flash) drafts the JSON → the
-// validator replays every move → a repair loop fixes what fails → index,
-// queue and git updated. Resumable by nature: nothing is committed unless
-// the section is green.
+// One section per run. The model writes content/<id>.json with its file
+// tools; the validator replays every move locally (cheap, no model); if
+// validation fails the model gets ONE repair pass with the error list.
+// Nothing is committed unless the section is green.
 //
 //   npm run generate                # next pending section from the queue
 //   npm run generate -- 1.2         # one specific section
@@ -17,27 +17,28 @@ import { log } from "./log.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const MODEL = "zai-coding-plan/glm-5.3-flash";
-const TIMEOUT_MS = 15 * 60 * 1000;
-const MAX_REPAIRS = 2;
+const TIMEOUT_MS = 25 * 60 * 1000;
+const MAX_REPAIRS = 1;
 
 // ---------- args ----------
 
 const argv = process.argv.slice(2);
-const flags = argv.filter((a) => a.startsWith("--"));
+const dry = argv.includes("--dry");
 const targetId = argv.find((a) => !a.startsWith("--"));
-const dry = flags.includes("--dry");
 
-// ---------- prompts ----------
+// ---------- prompt ----------
 
-const specOf = (spec) => JSON.stringify(spec, null, 2);
-
-function gamesDigest() {
-  const raw = fs.readFileSync(path.join(ROOT, "data/source/games.pgn"), "utf-8");
-  const start = raw.indexOf("[Event");
-  return start === -1 ? raw : raw.slice(start);
-}
-
-function render(template, vars) {
+function promptFor(template, id, chapter, section, errors) {
+  const vars = {
+    CHAPTER_ID: chapter.id,
+    CHAPTER_TITLE: chapter.title,
+    SECTION_ID: section.id,
+    SECTION_TITLE: section.title,
+    OUTFILE: `content/${id}.json`,
+    GOAL: [section.spec.goal, ...(section.spec.keyIdeas ?? []).map((i) => `- ${i}`)].join("\n"),
+    SKELETON: JSON.stringify(section.spec.fixedSteps ?? null, null, 2),
+    ERRORS: (errors ?? []).map((e) => `- ${e.path}: ${e.message}`).join("\n"),
+  };
   let out = fs.readFileSync(path.join(ROOT, "prompts", template), "utf-8");
   for (const [key, value] of Object.entries(vars)) {
     out = out.replaceAll(`{{${key}}}`, value);
@@ -45,31 +46,7 @@ function render(template, vars) {
   return out;
 }
 
-function promptFor(id, chapter, section, errors) {
-  const vars = {
-    CHAPTER_ID: chapter.id,
-    CHAPTER_TITLE: chapter.title,
-    SECTION_ID: section.id,
-    SECTION_TITLE: section.title,
-    SPEC: specOf(section.spec),
-    GAMES: gamesDigest(),
-    ERRORS: (errors ?? []).map((e) => `- ${e.path}: ${e.message}`).join("\n"),
-  };
-  return render(errors ? "repair.md" : "section.md", vars);
-}
-
 // ---------- model ----------
-
-function extractJson(text) {
-  const from = text.indexOf("{");
-  const to = text.lastIndexOf("}");
-  if (from === -1 || to <= from) return null;
-  try {
-    return JSON.parse(text.slice(from, to + 1));
-  } catch {
-    return null;
-  }
-}
 
 function runOpencode(prompt) {
   return new Promise((resolve) => {
@@ -94,21 +71,39 @@ function runOpencode(prompt) {
     child.on("close", (code, signal) => {
       clearInterval(heartbeat);
       const texts = [];
+      let tokens = null;
       for (const line of stdout.split("\n")) {
         try {
           const event = JSON.parse(line);
           if (event.type === "text" && event.part?.text) texts.push(event.part.text);
+          if (event.type === "step_finish" && event.part?.tokens) tokens = event.part.tokens;
         } catch { /* heartbeat lines are not json */ }
       }
-      if (signal) return resolve({ ok: false, text: texts.join("\n"), reason: `killed by ${signal} after ${fmtDur(Date.now() - started)}` });
-      resolve({ ok: code === 0, text: texts.join("\n"), reason: code === 0 ? null : `opencode exited ${code}` });
+      const text = texts.join("\n");
+      if (signal) return resolve({ ok: false, text, tokens, reason: `killed by ${signal} after ${fmtDur(Date.now() - started)}` });
+      resolve({ ok: code === 0, text, tokens, reason: code === 0 ? null : `opencode exited ${code}` });
     });
   });
 }
 
 const fmtDur = (ms) => `${Math.floor(ms / 60000)}m ${Math.round((ms % 60000) / 1000)}s`;
 
-// ---------- counts ----------
+// ---------- judge ----------
+
+// read what the model wrote, canonicalize, replay it. returns error list.
+function judge(id, outfile) {
+  let doc;
+  try {
+    doc = JSON.parse(fs.readFileSync(outfile, "utf-8"));
+  } catch (e) {
+    return [{ path: `content/${id}.json`, message: `missing or unparsable: ${e.message}` }];
+  }
+  const errors = validateSection(doc);
+  if (errors.length === 0) {
+    fs.writeFileSync(outfile, JSON.stringify(doc, null, 2) + "\n");
+  }
+  return errors;
+}
 
 const counts = (doc) => {
   const steps = (doc.sections ?? []).reduce((n, s) => n + (s.steps?.length ?? 0), 0);
@@ -138,7 +133,9 @@ async function main() {
   }
 
   if (dry) {
-    console.log(promptFor(id, chapter, section, null));
+    console.log(promptFor("section.md", id, chapter, section));
+    console.log("\n========================= repair prompt =========================\n");
+    console.log(promptFor("repair.md", id, chapter, section, [{ path: "steps[2].moves[0]", message: "\"Qxb7\" is illegal here" }]));
     return;
   }
 
@@ -146,46 +143,38 @@ async function main() {
   start(id);
   log(`generate ${id} started (${section.title})`);
 
-  let errors = null;
+  let errors = [];
   for (let attempt = 0; attempt <= MAX_REPAIRS; attempt++) {
-    const label = attempt === 0 ? "draft" : `repair ${attempt}/${MAX_REPAIRS}`;
-    const prompt = promptFor(id, chapter, section, errors);
-    if (dry) {
-      console.log("--- prompt ----------------------------------------------");
-      console.log(prompt);
-      return;
-    }
+    const label = attempt === 0 ? "write" : "repair";
+    const prompt = attempt === 0
+      ? promptFor("section.md", id, chapter, section)
+      : promptFor("repair.md", id, chapter, section, errors);
     console.log(`${label}: calling ${MODEL} …`);
     const run = await runOpencode(prompt);
-    if (!run.ok && !run.text) {
+    if (run.tokens) console.log(`${label}: ${run.tokens.output ?? "?"} output tokens`);
+    if (!run.ok) {
       errors = [{ path: "model", message: run.reason }];
       console.log(`${label}: ${run.reason}`);
       break;
     }
-    const doc = extractJson(run.text);
-    if (!doc) {
-      errors = [{ path: "reply", message: "the reply contained no parsable JSON document" }];
-      console.log(`${label}: no parsable JSON in reply`);
-    } else {
-      fs.writeFileSync(outfile, JSON.stringify(doc, null, 2) + "\n");
-      errors = validateSection(doc);
-      console.log(`${label}: ${errors.length === 0 ? "valid" : `${errors.length} validation error(s)`}`);
-      if (errors.length) for (const e of errors) console.log(`  · ${e.path}: ${e.message}`);
-    }
+    errors = judge(id, outfile);
+    console.log(`${label}: ${errors.length === 0 ? "valid" : `${errors.length} validation error(s)`}`);
+    for (const e of errors) console.log(`  · ${e.path}: ${e.message}`);
     if (errors.length === 0) {
+      const doc = JSON.parse(fs.readFileSync(outfile, "utf-8"));
       const { steps, quizzes } = counts(doc);
       buildIndex();
-      done(id, `${steps} steps · ${quizzes} quizzes · ${MODEL.split("/")[1]}`);
+      done(id, `${steps} steps · ${quizzes} quizzes`);
       commit(id, section.title);
-      log(`generate ${id} OK — ${steps} steps, ${quizzes} quizzes, ${attempt === 0 ? "first draft" : attempt + " repair(s)"}`);
+      log(`generate ${id} OK — ${steps} steps, ${quizzes} quizzes, ${attempt === 0 ? "no repair" : "1 repair"}`);
       console.log(`\nshipped content/${id}.json — ${steps} steps, ${quizzes} quizzes. Open http://localhost:8878/reader/section.html?s=${id}`);
       return;
     }
-    if (attempt < MAX_REPAIRS) console.log(`repairing with ${errors.length} error(s) in the prompt …`);
   }
 
   const reason = errors.map((e) => `${e.path}: ${e.message}`).join("; ").slice(0, 200);
   fail(id, reason);
+  fs.rmSync(outfile, { force: true }); // never leave a broken draft to block the next run
   log(`generate ${id} FAILED — ${reason}`);
   console.error(`\ngiving up on ${id}: ${reason}`);
   process.exit(1);
@@ -197,7 +186,7 @@ function commit(id, title) {
     execFileSync("git", ["commit", "-m", `content(${id}): ${title}`], { cwd: ROOT, stdio: "pipe" });
     console.log(`committed: content/${id}.json`);
   } catch {
-    console.log("git commit skipped (not a repo or nothing to commit)");
+    console.log("git commit skipped");
   }
 }
 

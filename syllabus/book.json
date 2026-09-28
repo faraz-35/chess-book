@@ -26,24 +26,55 @@
         },
         {
           "id": "1.2",
-          "title": "Steering the Game",
+          "title": "Name Your Goal",
           "spec": {
-            "goal": "Teach what Soltis puts at the heart of the book: a master decides early what he wants out of the position and where to steer the game. Every move — even a quiet one — serves that goal. Amateurs move pieces; masters steer positions.",
+            "goal": "A master decides what he wants out of the position before moving. Amateurs wander; masters steer. Show the Ruy Lopez main line: White names the goal (c3 + d4 break), does the quiet homework moves, then cashes in with the break.",
             "keyIdeas": [
-              "Name the goal before you move: 'I want the d-file and a knight on e5' beats 'I want to attack'",
-              "Steering is slow: small advantages (open file, better bishop, safer king) accumulate",
-              "Improve your worst piece — the worst piece is where the next gain is",
-              "Quiet moves steer; forcing moves cash in. A master spends most of the game steering",
-              "When both players steer, the one with the clearer goal usually lands it"
+              "Name the goal before you move: 'the d-file break' beats 'attack'",
+              "Quiet moves steer; forcing moves cash in",
+              "Small advantages add up when every move serves the goal"
             ],
-            "teaching_arc": [
-              "Open with an amateur trap: wandering moves with no goal vs a master quietly improving",
-              "A constructed middlegame position where the reader picks the steering move (quiz: the worst piece's best square or the file seizure), not a tactic — a PLAN move",
-              "Show the same position steered well vs steered lazily, two branches",
-              "A flash test on a steering position: where will this endgame/rook go?",
-              "Close with takeaways tying steering to the skills from 1.1"
+            "fixedSteps": [
+              { "kind": "moves", "moves": ["e4", "e5", "Nf3", "Nc6", "Bb5", "a6", "Ba4", "Nf6", "O-O", "Be7"], "point": "A real main line — the Ruy Lopez. White has castled; now comes the plan." },
+              { "kind": "arrows", "arrows": [["f1", "e1"], ["c2", "c3"], ["d2", "d4"]], "point": "The goal, named before moving: rook to e1, pawn to c3, pawn to d4 — the central break." },
+              { "kind": "moves", "moves": ["Re1", "b5", "Bb3", "d6", "c3", "O-O"], "point": "White executes the preparation move by move; Black castles into the same structure." },
+              { "kind": "quiz", "solution": "h3", "point": "The quiet move with a job: after Black castled, h3 stops the annoying Bg4 pin. Alternatives do nothing for the plan." },
+              { "kind": "moves", "moves": ["Na5", "Bc2", "c5"], "point": "Black hits the bishop and prepares pressure against d4." },
+              { "kind": "quiz", "solution": "d4", "point": "The break — the goal reached after ten moves of steering. This is the move the whole plan existed for." },
+              { "kind": "moves", "moves": ["cxd4", "cxd4"], "point": "The center opens on White's terms; every piece wakes up with a role." },
+              { "kind": "takeaways", "point": "Numbered takeaways: name the goal; quiet moves steer, forcing moves cash in; homework first, break later." }
             ],
-            "exerciseMix": "3–4 quizzes whose solutions are strong quiet/steering moves (must still have ONE clearly best answer), at most 1 flash",
+            "exerciseMix": "2 board quizzes (h3, d4) whose solutions are fixed and pre-verified",
+            "steps_hint": "8 steps as given in fixedSteps, 2 quizzes, no flash",
+            "seedGames": []
+          }
+        },
+        {
+          "id": "1.3",
+          "title": "Improve Your Worst Piece",
+          "spec": {
+            "goal": "The practical test of steering: find your worst piece and give it a job. The reader learns to spot the piece doing nothing and pick its best square.",
+            "keyIdeas": [
+              "The worst piece is where the next gain is",
+              "One improving move often changes the whole position",
+              "Ask 'where does this piece belong?' before asking 'what does it attack?'"
+            ],
+            "exerciseMix": "2 quizzes: find the worst piece's best square; one flash memory test on an improving-maneuver position is allowed",
+            "steps_hint": "5–7 steps, 2 quizzes, at most 1 flash",
+            "seedGames": []
+          }
+        },
+        {
+          "id": "1.4",
+          "title": "Steering Test",
+          "spec": {
+            "goal": "Short test section closing chapter 1: a handful of positions where the reader must find the steering move, then takeaways tying together 1.1 (what masters see) and 1.2–1.3 (steering).",
+            "keyIdeas": [
+              "Recognition first: chunks, forcing moves, then the goal",
+              "Every position from the chapter's ideas, presented fresh"
+            ],
+            "exerciseMix": "3 quizzes back to back with brief framing text, final takeaway step",
+            "steps_hint": "5–7 steps, 3 quizzes, no flash",
             "seedGames": []
           }
         }
