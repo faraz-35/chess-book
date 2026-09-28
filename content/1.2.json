@@ -1,0 +1,109 @@
+{
+  "book": "What It Takes to Become a Chess Master",
+  "author": "Andrew Soltis",
+  "chapter": "Chapter 1 · What Matters Most",
+  "section": "1.2 — Name Your Goal",
+  "baseFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+  "sections": [
+    {
+      "title": "Decide First",
+      "steps": [
+        {
+          "title": "A real main line",
+          "moves": [
+            "e4",
+            "e5",
+            "Nf3",
+            "Nc6",
+            "Bb5",
+            "a6",
+            "Ba4",
+            "Nf6",
+            "O-O",
+            "Be7"
+          ],
+          "text": "This is the Ruy Lopez, one of the oldest and most trusted openings in chess. Both sides developed sensibly and White has castled. Nothing dramatic has happened yet — and that is the point. Before White touches another piece, he already knows what he wants out of the position."
+        },
+        {
+          "title": "The goal, named",
+          "arrows": [
+            [
+              "f1",
+              "e1"
+            ],
+            [
+              "c2",
+              "c3"
+            ],
+            [
+              "d2",
+              "d4"
+            ]
+          ],
+          "text": "Here is the difference between a master and a club player. The club player says \"I'll attack.\" The master says something you can actually work toward: <b>rook to e1, pawn to c3, pawn to d4</b> — a break in the center.\n\nThose three arrows are the whole plan. \"Attack the king\" is a wish. \"c3 and d4\" is a goal, and every move from now on either serves it or gets rejected."
+        }
+      ]
+    },
+    {
+      "title": "Quiet Moves Do the Work",
+      "steps": [
+        {
+          "title": "Homework, one move at a time",
+          "moves": [
+            "Re1",
+            "b5",
+            "Bb3",
+            "d6",
+            "c3",
+            "O-O"
+          ],
+          "text": "Now White does the quiet work. Re1 clears the f1 square and adds pressure down the e-file; c3 builds the pawn base that d4 will need. Black sets up the same structure and castles too — but he is copying, not steering.\n\nNotice that none of these moves threaten anything. Each one has a job anyway: they are all rehearsals for the break."
+        },
+        {
+          "title": "Your move — a quiet one",
+          "quiz": {
+            "solution": "h3",
+            "hint": "Black would love to pin your knight with his bishop. One small pawn move makes that impossible.",
+            "praise": "<b>h3</b> is a quiet move with a job. It takes the g4 square away from Black's bishop, so the pin ...Bg4 — the one move that could slow the whole build-up — is simply never available.\n\nThis is the pattern: before the big break, ask what your opponent wants to do next, and take it away for the price of a pawn move. No threats, no captures. Just one question answered in advance."
+          },
+          "text": "Black just castled. His next idea is annoying: ...Bg4 would pin your knight to the queen and stall the plan.\n\n<b>Find the quiet move</b> that takes that idea off the board before it happens."
+        },
+        {
+          "title": "Black pushes back",
+          "moves": [
+            "Na5",
+            "Bc2",
+            "c5"
+          ],
+          "text": "Black is not a spectator. Na5 hits your bishop and offers a trade; then c5 strikes at d4 before the pawn even gets there.\n\nThis is normal — your opponent has goals too. White's answers keep the plan alive: the bishop steps back but stays aimed at the kingside, and d4 remains on the agenda."
+        }
+      ]
+    },
+    {
+      "title": "Cashing In",
+      "steps": [
+        {
+          "title": "The move it was all for",
+          "quiz": {
+            "solution": "d4",
+            "hint": "You have been rehearsing one central pawn push since move eight. Play it.",
+            "praise": "<b>d4!</b> The goal, reached. This is why c3 existed, why the rook went to e1, why the bishop retreated to c2 instead of trading on a5.\n\nThe pattern: quiet moves slowly build a small advantage, and one forcing move collects it. Steering first, cashing in second — never the other way around."
+          },
+          "text": "Your bishop sits safely on c2, aimed at the king's side. Black's c-pawn has come at you — and it is your move.\n\n<b>Time to cash in.</b> Play the break the last ten moves were all about."
+        },
+        {
+          "title": "The center opens",
+          "moves": [
+            "cxd4",
+            "cxd4"
+          ],
+          "text": "Pawns come off and the position bursts open — on White's terms, at a moment White chose. The rook on e1, the bishop on c2, the knight on f3: every white piece wakes up with a role.\n\nBlack's queenside knight is still far from the action. That is what ten moves of steering bought."
+        },
+        {
+          "title": "What you learned",
+          "text": "<b>Takeaways from this section:</b>\n\n1. <b>Name your goal before you move.</b> \"Break with d4\" gives every move a test to pass. \"Attack\" gives you nothing to check a move against.\n2. <b>Quiet moves steer; forcing moves cash in.</b> h3 and c3 made no highlights, but they are what made d4 strong.\n3. <b>Homework first, break later.</b> Small advantages add up when every move serves the same goal.\n\nNext: finding and improving your worst piece — because a goal is only as good as your weakest piece's ability to serve it."
+        }
+      ]
+    }
+  ]
+}

@@ -6,9 +6,15 @@
       "id": "1.1",
       "chapter": "Chapter 1 · What Matters Most",
       "section": "1.1 — What Masters See",
-      "title": "1.1 — What Masters See",
       "file": "content/1.1.json",
       "steps": 19
+    },
+    {
+      "id": "1.2",
+      "chapter": "Chapter 1 · What Matters Most",
+      "section": "1.2 — Name Your Goal",
+      "file": "content/1.2.json",
+      "steps": 8
     }
   ]
 }
